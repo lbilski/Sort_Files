@@ -13,6 +13,7 @@ public class Start extends Application {
     Parent root = FXMLLoader.load(getClass().getResource("/main_window.fxml"));
     primaryStage.setTitle("Sortowanie");
     primaryStage.setScene(new Scene(root));
+    primaryStage.setResizable(false);
     primaryStage.show();
   }
 

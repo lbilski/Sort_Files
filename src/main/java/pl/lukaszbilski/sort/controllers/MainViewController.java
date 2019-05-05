@@ -76,26 +76,30 @@ public class MainViewController implements Initializable {
    * This method set text in pathFromTextField.
    */
   public void setPathFrom() {
-    pathFromTextField.setText(getDirectoryChooser().getAbsolutePath());
+    pathFromTextField.setText(getDirectoryChooser());
   }
 
   /**
    * This method set text in pathToTextField.
    */
   public void setPathTo() {
-    pathToTextField.setText(getDirectoryChooser().getAbsolutePath());
+    pathToTextField.setText(getDirectoryChooser());
   }
 
   /**
    * Return File directory chosen by the user.
    */
-  private File getDirectoryChooser() {
+  private String getDirectoryChooser() {
     DirectoryChooser directoryChooser = new DirectoryChooser();
     File selectedDirectory = new File(System.getProperty("user.dir"));
 
     directoryChooser.setInitialDirectory(selectedDirectory);
     selectedDirectory = directoryChooser.showDialog(null);
 
-    return selectedDirectory;
+    if(selectedDirectory != null) {
+        return selectedDirectory.getAbsolutePath();
+    }else{
+        return "";
+    }
   }
 }

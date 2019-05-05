@@ -1,28 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="222.0" prefWidth="600.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.lukaszbilski.sort.controllers.MainViewController">
+
+<GridPane prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.lukaszbilski.sort.controllers.MainViewController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints fillHeight="false" maxHeight="158.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+      <RowConstraints fillHeight="false" maxHeight="240.0" minHeight="10.0" prefHeight="94.0" vgrow="SOMETIMES" />
+      <RowConstraints fillHeight="false" maxHeight="240.0" minHeight="5.0" prefHeight="70.0" vgrow="SOMETIMES" />
+   </rowConstraints>
    <children>
-      <Line endX="450.0" layoutX="115.0" layoutY="36.0" opacity="0.5" startX="-100.0" stroke="#a39e9e" strokeWidth="2.0">
-         <effect>
-            <Bloom />
-         </effect>
-      </Line>
-      <Label layoutX="14.0" layoutY="14.0" text="Program sortuje zdjęcia tylko z jednego rocznika" />
-      <Label layoutX="14.0" layoutY="55.0" text="Katalog początkowy:" />
-      <Label layoutX="15.0" layoutY="95.0" text="Katalog końcowy:" />
-      <TextField fx:id="pathFromTextField" editable="false" layoutX="143.0" layoutY="51.0" prefHeight="25.0" prefWidth="292.0" />
-      <TextField fx:id="pathToTextField" editable="false" layoutX="143.0" layoutY="91.0" prefHeight="25.0" prefWidth="292.0" />
-      <Button fx:id="setPathFromButton" layoutX="455.0" layoutY="51.0" mnemonicParsing="false" onMouseClicked="#setPathFrom" text="Wybierz" />
-      <Button fx:id="setPathToButton" layoutX="455.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#setPathTo" text="Wybierz" />
-      <Line endX="450.0" layoutX="115.0" layoutY="130.0" opacity="0.5" startX="-100.0" stroke="#a49f9f" strokeWidth="2.0" />
-      <Button fx:id="sortButton" layoutX="250.0" layoutY="141.0" mnemonicParsing="false" onMouseClicked="#startSort" prefHeight="25.0" prefWidth="100.0" text="Sortuj" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" />
-      <Label fx:id="labelShowName" alignment="CENTER" layoutX="148.0" layoutY="175.0" prefHeight="20.0" prefWidth="300.0" text="wyswietlanie nazw pliku" AnchorPane.bottomAnchor="27.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" />
-      <ProgressBar fx:id="progressBar" layoutX="200.0" layoutY="145.0" prefWidth="200.0" progress="0.0" visible="false" />
+      <VBox prefHeight="107.0" prefWidth="600.0">
+         <children>
+            <Label text="1. Program kataloguje zdjęcia z jednego rocznika.">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="2. W folderze do przesortowania moga znajdować się inne foldery, ale nie mogę być one skompresowane">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="3. Pliki bez zapisanej daty lub inne niż zdjęcia zostaną przeniesione do ścieżki: wybranyKatalog/Brak daty">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </Label>
+            <Line endX="450.0" opacity="0.5" startX="-100.0" stroke="#a39e9e" strokeWidth="2.0">
+               <effect>
+                  <Bloom />
+               </effect>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Line>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <padding>
+            <Insets left="15.0" top="10.0" />
+         </padding>
+      </VBox>
+      <GridPane GridPane.rowIndex="1">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="130.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="321.0" minWidth="10.0" prefWidth="264.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="172.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="3.0" prefHeight="15.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Katalog początkowy:">
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Katalog końcowy:" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="pathFromTextField" editable="false" prefHeight="25.0" prefWidth="247.0" GridPane.columnIndex="1" />
+            <Button fx:id="setPathFromButton" mnemonicParsing="false" onMouseClicked="#setPathFrom" text="Wybierz" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Button>
+            <TextField fx:id="pathToTextField" editable="false" prefHeight="25.0" prefWidth="292.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="setPathToButton" disable="true" mnemonicParsing="false" onMouseClicked="#setPathTo" text="Wybierz" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </Button>
+            <Line endX="450.0" opacity="0.5" startX="-100.0" stroke="#a39e9e" strokeWidth="2.0" GridPane.rowIndex="2">
+               <effect>
+                  <Bloom />
+               </effect>
+               <GridPane.margin>
+                  <Insets left="15.0" />
+               </GridPane.margin>
+            </Line>
+         </children>
+      </GridPane>
+      <AnchorPane prefHeight="106.0" prefWidth="600.0" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="sortButton" disable="true" layoutX="243.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#startSort" prefHeight="25.0" prefWidth="100.0" text="Sortuj" AnchorPane.topAnchor="0.0" />
+            <ProgressBar fx:id="progressBar" layoutX="200.0" layoutY="18.0" prefWidth="200.0" progress="0.0" visible="false" AnchorPane.topAnchor="0.0" />
+            <Label fx:id="labelShowName" alignment="CENTER" layoutX="150.0" layoutY="43.0" prefHeight="20.0" prefWidth="300.0" text="wyswietlanie nazw pliku" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="30.0" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</GridPane>
