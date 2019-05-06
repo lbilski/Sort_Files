@@ -3,12 +3,11 @@ package pl.lukaszbilski.sort.controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
@@ -28,7 +27,11 @@ public class MainViewController implements Initializable {
 
   @FXML TextField pathFromTextField, pathToTextField;
 
+  private final String DEFAULT_DIRECTORY = "user.dir";
+
   public void initialize(URL location, ResourceBundle resources) {
+
+    //Listener set values when progress bar will be complete
     progressBar.progressProperty().addListener(new ChangeListener<Number>() {
       public void changed(ObservableValue<? extends Number>
                             observable, Number oldValue, Number newValue) {
@@ -40,12 +43,23 @@ public class MainViewController implements Initializable {
         }
       }
     });
+
+    //This listener prevents sorting if paths are not selected
+    sortButton.setOnAction(new EventHandler<ActionEvent>() {
+      public void handle(ActionEvent event) {
+        if(isPathIsCorrect()) {
+          confirmationDialog("Błąd wprowadzonych danych", "Ustaw poprawne ścieżki katalogów");
+        }else {
+          startSort();
+        }
+      }
+    });
   }
 
   /**
    * This method start after "Sortuj" button will be clicked.
    */
-  public void startSort() {
+  private void startSort() {
     sortButton.setVisible(false);
     progressBar.setVisible(true);
 
@@ -87,11 +101,11 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * Return File directory chosen by the user.
+   * Return File directory chosen by the user, if user did'nt chose directory return empty string.
    */
   private String getDirectoryChooser() {
     DirectoryChooser directoryChooser = new DirectoryChooser();
-    File selectedDirectory = new File(System.getProperty("user.dir"));
+    File selectedDirectory = new File(System.getProperty(DEFAULT_DIRECTORY));
 
     directoryChooser.setInitialDirectory(selectedDirectory);
     selectedDirectory = directoryChooser.showDialog(null);
@@ -101,5 +115,26 @@ public class MainViewController implements Initializable {
     }else{
         return "";
     }
+  }
+
+  /**
+   * The method checks if a path has been selected.
+   * @return true if user didn't chose the directory "To" or "From".
+  */
+  private boolean isPathIsCorrect() {
+    return pathFromTextField.getLength() == 0 || pathToTextField.getLength() == 0;
+  }
+
+  /**
+   * This method create a information dialog
+   * @param title this is a window title
+   * @param message is a message to user
+ */
+  private void confirmationDialog(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    alert.setTitle(title);
+    alert.setHeaderText(null);
+    alert.setContentText(message);
+    alert.showAndWait();
   }
 }
