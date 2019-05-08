@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.lukaszbilski</groupId>
-    <artifactId>sortPhotos</artifactId>
+    <artifactId>Sort_Files</artifactId>
     <version>2.0</version>
 
     <developers>
@@ -36,7 +36,22 @@
                     <failOnViolation>true</failOnViolation>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+    </dependencies>
 
 </project>

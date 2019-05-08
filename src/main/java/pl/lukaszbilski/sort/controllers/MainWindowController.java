@@ -2,19 +2,19 @@ package pl.lukaszbilski.sort.controllers;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
+import pl.lukaszbilski.sort.models.DataTransfer;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainViewController implements Initializable {
+public class MainWindowController implements Initializable {
 
   @FXML
   Button sortButton ,setPathFromButton ,setPathToButton;
@@ -25,7 +25,8 @@ public class MainViewController implements Initializable {
   @FXML
   Label labelShowName;
 
-  @FXML TextField pathFromTextField, pathToTextField;
+  @FXML
+  TextField pathFromTextField, pathToTextField;
 
   private final String DEFAULT_DIRECTORY = "user.dir";
 
@@ -63,24 +64,8 @@ public class MainViewController implements Initializable {
     sortButton.setVisible(false);
     progressBar.setVisible(true);
 
-    final Task task = new Task<Void>() {
-      @Override public Void call() {
-        final long max = 50;
-        for (int i = 1; i <= max; i++) {
-          if (isCancelled()) {
-            break;
-          }
-          try {
-            Thread.sleep(25);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-          updateProgress(i, max);
-          updateMessage(String.valueOf(i));
-        }
-        return null;
-      }
-    };
+    DataTransfer task = new DataTransfer(pathFromTextField.getText(), pathToTextField.getText());
+
     progressBar.progressProperty().bind(task.progressProperty());
     labelShowName.textProperty().bind(task.messageProperty());
     new Thread(task).start();
@@ -126,15 +111,15 @@ public class MainViewController implements Initializable {
   }
 
   /**
-   * This method create a information dialog
-   * @param title this is a window title
-   * @param message is a message to user
- */
+   * This method create a information dialog.
+   * @param title this is a window title.
+   * @param message is a message to user.
+  */
   private void confirmationDialog(String title, String message) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle(title);
-    alert.setHeaderText(null);
-    alert.setContentText(message);
-    alert.showAndWait();
+     Alert alert = new Alert(Alert.AlertType.INFORMATION);
+     alert.setTitle(title);
+     alert.setHeaderText(null);
+     alert.setContentText(message);
+     alert.showAndWait();
   }
 }
