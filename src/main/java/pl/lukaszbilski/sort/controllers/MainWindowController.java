@@ -48,10 +48,10 @@ public class MainWindowController implements Initializable {
     //This listener prevents sorting if paths are not selected
     sortButton.setOnAction(new EventHandler<ActionEvent>() {
       public void handle(ActionEvent event) {
-        if(isPathIsCorrect()) {
-          confirmationDialog("Błąd wprowadzonych danych", "Ustaw poprawne ścieżki katalogów");
-        }else {
+        if(!isPathIsCorrect()) {
           startSort();
+        }else {
+          confirmationDialog("Błąd wprowadzonych danych", "Ustaw poprawne ścieżki katalogów");
         }
       }
     });

@@ -4,50 +4,47 @@ import javafx.concurrent.Task;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class DataTransfer extends Task{
     private File sourceDirectory;
-    private File finalDirectory;
+    static File finalDirectoryByUser;
     private double sizeOfDirectory;
-    private final Map<Integer, String> MONTHS = new LinkedHashMap<>();
+    private double currentSize;
     private List<File> listOfPhotos = new ArrayList<>();
-    double currentSize;
 
     /**
      * Class constructor.
      */
     public DataTransfer(String sourcePath, String finalPath) {
         sourceDirectory = new File(sourcePath);
-        finalDirectory = new File(finalPath);
+        finalDirectoryByUser = new File(finalPath);
         sizeOfDirectory = convertBytesToMegaBytes(FileUtils.sizeOfDirectory(sourceDirectory));
-        setMonths();
     }
 
     @Override
     protected Object call(){
+        updateMessage("Tworzenie listy plików");
         createListOfFiles(sourceDirectory);
 
-        for (File child: listOfPhotos){
-            currentSize += convertBytesToMegaBytes(FileUtils.sizeOf(child));
-            System.out.println(child.getName());
+        for (File fileToMove: listOfPhotos){
+            currentSize += convertBytesToMegaBytes(FileUtils.sizeOf(fileToMove));
+            DataOfFile dataOfFile = new DataOfFile(fileToMove, finalDirectoryByUser);
+
+
             updateMessage("Pozostało: " + remaingSize(sizeOfDirectory,currentSize) + " MB");
             updateProgress(currentSize,sizeOfDirectory);
-
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
-
         return null;
     }
-
-    private void createListOfFiles(File file){
+    /**
+     * Create list of files to check.
+     * @param file is source directory
+     */
+    private void createListOfFiles(File file) {
         File[] mainDirectory = file.listFiles();
 
         if (mainDirectory != null) {
@@ -70,25 +67,21 @@ public class DataTransfer extends Task{
         return (double) bytes / (1024L * 1024L);
     }
 
+    /**
+     * Method calculates difference between processed and total size of files.
+     * @param currentSize is a size of processed files.
+     * @param totalSize is a size of source directory.
+     * @return size in MB remaining files in String format
+     */
     private String remaingSize(double currentSize, double totalSize){
         return String.format("%.2f", currentSize - totalSize);
     }
 
-    /**
-     * This method set months in Map.
-     */
-    private void setMonths() {
-        MONTHS.put(1, "Styczeń");
-        MONTHS.put(2, "Luty");
-        MONTHS.put(3, "Marzec");
-        MONTHS.put(4, "Kwiecień");
-        MONTHS.put(5, "Maj");
-        MONTHS.put(6, "Czerwiec");
-        MONTHS.put(7, "Lipiec");
-        MONTHS.put(8, "Sierpień");
-        MONTHS.put(9, "Wrzesień");
-        MONTHS.put(10, "Październik");
-        MONTHS.put(11, "Listopad");
-        MONTHS.put(12, "Grudzień");
+    private void moveFile(String pathFrom, String pathTo){
+        try {
+            Files.move(Paths.get(pathFrom), Paths.get(pathTo));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
