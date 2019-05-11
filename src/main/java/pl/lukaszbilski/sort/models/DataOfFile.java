@@ -4,6 +4,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,19 +15,27 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 public class DataOfFile {
-    private String nameOfFile;
-    private File pathToFile;
-    private File finalFile;
+    private String fileName;
+    private String pathToFile;
+    private File newFile;
     private Optional<Date> creationDate;
 
     final String [] MONTHS = {"Styczen", "Luty", "Marzec", "Kwiecien", "Maj", "Czerwiec", "Lipiec", "Sierpien", "Wrzesien", "Pazdziernik", "Listopad", "Grudzien"};
 
 
     public DataOfFile (File fileToCheck, File pathToFile){
-        this.pathToFile = pathToFile;
+        this.pathToFile = pathToFile.getAbsolutePath();
         this.creationDate = getDateOriginal(fileToCheck);
-        this.nameOfFile = createFileName(fileToCheck);
-        System.out.println(nameOfFile);
+        this.fileName = createFileName(fileToCheck);
+
+        editPathToFile();
+        createNewSubdirectory();
+        setNewFile(this.pathToFile, fileName);
+
+//        if(isFileExist(newFile)){
+//            fileName = editFileName(fileName);
+//            setNewFile(this.pathToFile, fileName);
+//        }
     }
 
     private Optional<Date> getDateOriginal(File input) {
@@ -44,17 +53,50 @@ public class DataOfFile {
     }
 
     private String createFileName(File fileToRename) {
-        if(creationDate.isPresent()){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
-            StringBuilder fileName = new StringBuilder();
+        try{
+            if(creationDate.isPresent()){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
+                StringBuilder fileName = new StringBuilder();
 
-            fileName.append(dateFormat.format(creationDate.get()));
-            fileName.append(getExtension(fileToRename));
+                fileName.append(dateFormat.format(creationDate.get()));
+                fileName.append(getExtension(fileToRename));
 
-            return String.valueOf(fileName);
-        }else {
-            return fileToRename.getName();
+                return String.valueOf(fileName);
+            }else {
+                return fileToRename.getName();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
+    }
+
+    private void editPathToFile(){
+        if(creationDate.isPresent()){
+          StringBuilder newPath = new StringBuilder();
+
+          newPath.append(pathToFile);
+          newPath.append("\\");
+          newPath.append(MONTHS[creationDate.get().getMonth()]);
+          newPath.append("\\");
+          newPath.append(creationDate.get().getDate());
+
+          pathToFile = newPath.toString();
+        } else {
+          pathToFile += "\\Brak daty";
+        }
+    }
+
+    private void createNewSubdirectory (){
+        File newDirectory = new File(pathToFile);
+
+        if(!newDirectory.exists()){
+            newDirectory.mkdirs();
+        }
+    }
+
+    private void setNewFile(String path, String name) {
+        newFile = new File(path + "\\" + name);
     }
 
     private String getExtension(File input) {
@@ -63,4 +105,12 @@ public class DataOfFile {
 
         return name.substring(extension);
     }
+
+//    private boolean isFileExist(File file) {
+//        return file.exists();
+//    }
+//
+//    public File getNewFile () {
+//        return newFile;
+//    }
 }
