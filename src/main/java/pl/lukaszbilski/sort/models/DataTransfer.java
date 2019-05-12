@@ -34,6 +34,7 @@ public class DataTransfer extends Task{
             currentSize += convertBytesToMegaBytes(FileUtils.sizeOf(fileToMove));
             DataOfFile dataOfFile = new DataOfFile(fileToMove, finalDirectoryByUser);
 
+            moveFile(fileToMove.getAbsolutePath(), dataOfFile.getNewFile().getAbsolutePath());
 
             updateMessage("Pozostało: " + remaingSize(sizeOfDirectory,currentSize) + " MB");
             updateProgress(currentSize,sizeOfDirectory);

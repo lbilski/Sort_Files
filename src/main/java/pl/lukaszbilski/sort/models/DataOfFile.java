@@ -4,7 +4,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class DataOfFile {
     final String [] MONTHS = {"Styczen", "Luty", "Marzec", "Kwiecien", "Maj", "Czerwiec", "Lipiec", "Sierpien", "Wrzesien", "Pazdziernik", "Listopad", "Grudzien"};
 
 
-    public DataOfFile (File fileToCheck, File pathToFile){
+    DataOfFile (File fileToCheck, File pathToFile){
         this.pathToFile = pathToFile.getAbsolutePath();
         this.creationDate = getDateOriginal(fileToCheck);
         this.fileName = createFileName(fileToCheck);
@@ -32,10 +32,10 @@ public class DataOfFile {
         createNewSubdirectory();
         setNewFile(this.pathToFile, fileName);
 
-//        if(isFileExist(newFile)){
-//            fileName = editFileName(fileName);
-//            setNewFile(this.pathToFile, fileName);
-//        }
+        while(newFile.exists()){
+            fileName = addNextNumberToName(fileName);
+            setNewFile(this.pathToFile, this.fileName);
+        }
     }
 
     private Optional<Date> getDateOriginal(File input) {
@@ -53,22 +53,25 @@ public class DataOfFile {
     }
 
     private String createFileName(File fileToRename) {
+        StringBuilder fileName = new StringBuilder();
         try{
             if(creationDate.isPresent()){
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
-                StringBuilder fileName = new StringBuilder();
 
                 fileName.append(dateFormat.format(creationDate.get()));
-                fileName.append(getExtension(fileToRename));
+                fileName.append("_0");
+                fileName.append(getExtension(fileToRename.getName()));
 
-                return String.valueOf(fileName);
             }else {
-                return fileToRename.getName();
+                fileName.append(FilenameUtils.removeExtension(fileToRename.getName()));
+                fileName.append("_0");
+                fileName.append(getExtension(fileToRename.getName()));
             }
         }catch (Exception e){
             e.printStackTrace();
-            return null;
         }
+
+        return fileName.toString();
     }
 
     private void editPathToFile(){
@@ -87,6 +90,19 @@ public class DataOfFile {
         }
     }
 
+    private String addNextNumberToName(String input) {
+        int indexOfNumber = input.indexOf(".")-1;
+        int numberOfFile = Integer.parseInt(String.valueOf(input.charAt(indexOfNumber)));
+
+        StringBuilder newName = new StringBuilder();
+
+        newName.append(input.substring(0,indexOfNumber));
+        newName.append(numberOfFile+1);
+        newName.append(getExtension(input));
+
+        return String.valueOf(newName);
+    }
+
     private void createNewSubdirectory (){
         File newDirectory = new File(pathToFile);
 
@@ -99,18 +115,13 @@ public class DataOfFile {
         newFile = new File(path + "\\" + name);
     }
 
-    private String getExtension(File input) {
-        String name = input.getName();
-        int extension = name.lastIndexOf(".");
+    private String getExtension(String input) {
+        int extension = input.lastIndexOf(".");
 
-        return name.substring(extension);
+        return input.substring(extension);
     }
 
-//    private boolean isFileExist(File file) {
-//        return file.exists();
-//    }
-//
-//    public File getNewFile () {
-//        return newFile;
-//    }
+    File getNewFile() {
+        return newFile;
+    }
 }
