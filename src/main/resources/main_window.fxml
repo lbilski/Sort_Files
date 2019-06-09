@@ -101,7 +101,7 @@
          <children>
             <Button fx:id="sortButton" layoutX="243.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Sortuj" AnchorPane.topAnchor="0.0" />
             <ProgressBar fx:id="progressBar" layoutX="200.0" layoutY="18.0" prefWidth="200.0" progress="0.0" visible="false" AnchorPane.topAnchor="0.0" />
-            <Label fx:id="labelShowName" alignment="CENTER" layoutX="150.0" layoutY="43.0" prefHeight="20.0" prefWidth="300.0" text="wyswietlanie nazw pliku" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="30.0" />
+            <Label fx:id="labelShowName" alignment="CENTER" layoutX="150.0" layoutY="43.0" prefHeight="20.0" prefWidth="300.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="30.0" />
          </children>
       </AnchorPane>
    </children>

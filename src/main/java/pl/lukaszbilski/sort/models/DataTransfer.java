@@ -48,6 +48,8 @@ public class DataTransfer extends Task{
     private void createListOfFiles(File file) {
         File[] mainDirectory = file.listFiles();
 
+        System.out.println(mainDirectory);
+
         if (mainDirectory != null) {
             for(File candidate: mainDirectory){
                 if (candidate.isFile()){

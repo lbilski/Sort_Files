@@ -29,6 +29,7 @@ public class DataOfFile {
         this.fileName = createFileName(fileToCheck);
 
         editPathToFile();
+
         createNewSubdirectory();
         setNewFile(this.pathToFile, fileName);
 
@@ -92,14 +93,15 @@ public class DataOfFile {
 
     private String addNextNumberToName(String input) {
         int indexOfNumber = input.indexOf(".")-1;
-        int numberOfFile = Integer.parseInt(String.valueOf(input.charAt(indexOfNumber)));
+        int numberOfFile = Character.getNumericValue(input.charAt(indexOfNumber));
 
         StringBuilder newName = new StringBuilder();
 
-        newName.append(input.substring(0,indexOfNumber));
-        newName.append(numberOfFile+1);
+        newName.append(input, 0, indexOfNumber);
+        newName.append(++numberOfFile);
         newName.append(getExtension(input));
 
+        System.out.println(newName);
         return String.valueOf(newName);
     }
 
@@ -118,7 +120,11 @@ public class DataOfFile {
     private String getExtension(String input) {
         int extension = input.lastIndexOf(".");
 
-        return input.substring(extension);
+        if(extension < 0){
+            return "";
+        }else {
+            return input.substring(extension);
+        }
     }
 
     File getNewFile() {
