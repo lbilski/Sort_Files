@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -21,7 +22,6 @@ public class DataOfFile {
     private Optional<Date> creationDate;
 
     final String [] MONTHS = {"Styczen", "Luty", "Marzec", "Kwiecien", "Maj", "Czerwiec", "Lipiec", "Sierpien", "Wrzesien", "Pazdziernik", "Listopad", "Grudzien"};
-
 
     DataOfFile (File fileToCheck, File pathToFile){
         this.pathToFile = pathToFile.getAbsolutePath();
@@ -78,12 +78,14 @@ public class DataOfFile {
     private void editPathToFile(){
         if(creationDate.isPresent()){
           StringBuilder newPath = new StringBuilder();
+          Calendar calendar = Calendar.getInstance();
+          calendar.setTime(creationDate.get());
 
           newPath.append(pathToFile);
           newPath.append("\\");
-          newPath.append(MONTHS[creationDate.get().getMonth()]);
+          newPath.append(MONTHS[calendar.get(Calendar.MONTH)]);
           newPath.append("\\");
-          newPath.append(creationDate.get().getDate());
+          newPath.append(calendar.get(Calendar.DAY_OF_MONTH));
 
           pathToFile = newPath.toString();
         } else {
